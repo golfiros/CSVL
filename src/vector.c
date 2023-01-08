@@ -34,18 +34,27 @@ void vector_delete(vector_t *vect) {
   free(vect);
 }
 
-size_t vector_capacity(const vector_t *vect) { return vect->capacity; }
-size_t vector_count(const vector_t *vect) { return vect->count; }
-bool vector_empty(const vector_t *vect) { return !vect->count; }
+size_t vector_capacity(const struct vector *vect) { return vect->capacity; }
+size_t vector_length(const struct vector *vect) { return vect->count; }
 
 void *vector_data(const struct vector *vect) { return vect->data; }
 
-bool vector_add(vector_t *vect, const void *value) {
+void *vector_get(const struct vector *vect, ptrdiff_t position) {
+  if (position < 0) {
+    position += vect->count;
+  }
+  if (position < 0 || position >= (ptrdiff_t)vect->count) {
+    return NULL;
+  }
+  return (char *)vect->data + vect->data_size * position;
+}
+
+int vector_add(vector_t *vect, const void *value) {
   if (vect->count == vect->capacity) {
     void *data =
         realloc(vect->data, (2 * vect->capacity + 1) * vect->data_size);
     if (!data) {
-      return false;
+      return 0;
     }
     vect->capacity *= 2;
     vect->capacity += 1;
@@ -53,5 +62,5 @@ bool vector_add(vector_t *vect, const void *value) {
   }
   memcpy((char *)vect->data + vect->data_size * vect->count++, value,
          vect->data_size);
-  return true;
+  return 1;
 }
