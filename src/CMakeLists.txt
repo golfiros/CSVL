@@ -1,5 +1,5 @@
 set(SOURCES 
-  )
+  vector.c)
 
 add_library(csvl SHARED ${SOURCES})
 
