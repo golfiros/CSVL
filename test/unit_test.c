@@ -23,7 +23,7 @@ Test(vector, add) {
   vector_t *vect = vector_new(sizeof(int), capacity);
 
   for (int i = 0; i < (int)capacity; i++) {
-    cr_assert(vector_add(vect, &i), "adding %d to vector should succeed", i);
+    cr_assert(vector_append(vect, &i), "adding %d to vector should succeed", i);
   }
 
   cr_assert(vector_length(vect) == capacity, "vector length should be %zu",
@@ -31,7 +31,7 @@ Test(vector, add) {
 
   for (int i = 0; i < 2 * (int)capacity; i++) {
     int j = i + capacity;
-    cr_assert(vector_add(vect, &j), "adding %d to vector should suceed", i);
+    cr_assert(vector_append(vect, &j), "adding %d to vector should suceed", i);
   }
 
   cr_assert(vector_capacity(vect) >= 3 * capacity,
@@ -47,7 +47,7 @@ Test(vector, get) {
 
   int entries = 100;
   for (int i = 0; i < entries; i++) {
-    vector_add(vect, &i);
+    vector_append(vect, &i);
   }
 
   for (int i = 0; i < entries; i++) {
@@ -76,7 +76,7 @@ Test(vector, insert) {
 
   int entries = 100;
   for (int i = 0; i < entries; i++) {
-    vector_add(vect, &i);
+    vector_append(vect, &i);
   }
 
   int val = 200;
@@ -119,7 +119,7 @@ Test(vector, remove) {
 
   int entries = 100;
   for (int i = 0; i < entries; i++) {
-    vector_add(vect, &i);
+    vector_append(vect, &i);
   }
 
   cr_assert(vector_remove(vect, 0, NULL),
@@ -177,7 +177,7 @@ Test(vector, find) {
   vector_t *vect = vector_new(sizeof(int), 0);
   int entries = 100;
   for (int i = 0; i < entries; i++) {
-    vector_add(vect, &i);
+    vector_append(vect, &i);
   }
 
   cr_assert(vector_find(vect, &entries) == vector_length(vect),
@@ -195,7 +195,7 @@ Test(vector, sort) {
   vector_t *vect = vector_new(sizeof(int), 0);
   int entries = 100;
   for (int i = entries - 1; i >= 0; i--) {
-    vector_add(vect, &i);
+    vector_append(vect, &i);
   }
   vector_sort(vect, intcmp);
   for (int i = 0; i < entries; i++) {

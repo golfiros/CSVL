@@ -56,7 +56,7 @@ static inline int expand(struct vector *vect) {
   return 1;
 }
 
-int vector_add(struct vector *vect, const void *restrict value) {
+int vector_append(struct vector *vect, const void *restrict value) {
   if (vect->length == vect->capacity) {
     if (!expand(vect)) {
       return 0;
