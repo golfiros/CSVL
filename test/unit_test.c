@@ -195,3 +195,19 @@ Test(vector, find) {
             "should have found existing element %d", val);
   vector_delete(vect);
 }
+
+int intcmp(const void *p1, const void *p2) { return *(int *)p1 - *(int *)p2; }
+
+Test(vector, sort) {
+  vector_t *vect = vector_new(sizeof(int), 0);
+  int entries = 100;
+  for (int i = entries - 1; i >= 0; i--) {
+    vector_add(vect, &i);
+  }
+  vector_sort(vect, intcmp);
+  for (int i = 0; i < entries; i++) {
+    cr_assert(*(int *)vector_get(vect, i) == i, "entry %d should be %d", i, i);
+  }
+
+  vector_delete(vect);
+}

@@ -146,3 +146,10 @@ size_t vector_find(const struct vector *vect, const void *value) {
     ;
   return position;
 }
+
+void vector_sort(vector_t *vect, int (*comp)(const void *, const void *)) {
+  if (!vect) {
+    return;
+  }
+  qsort(vect->data, vect->length, vect->item_size, comp);
+}
