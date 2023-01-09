@@ -175,3 +175,23 @@ Test(vector, remove) {
 
   vector_delete(vect);
 }
+
+Test(vector, find) {
+  int val = 0;
+  cr_assert(vector_find(NULL, &val) == 0, "null vector should return 0");
+  vector_t *vect = vector_new(sizeof(int), 0);
+  int entries = 100;
+  for (int i = 0; i < entries; i++) {
+    vector_add(vect, &i);
+  }
+  cr_assert(vector_find(vect, NULL) == vector_length(vect),
+            "should not be able to find NULL");
+
+  cr_assert(vector_find(vect, &entries) == vector_length(vect),
+            "should not be able to find non-existing element");
+
+  val = entries / 2;
+  cr_assert(vector_find(vect, &val) == (size_t)entries / 2,
+            "should have found existing element %d", val);
+  vector_delete(vect);
+}
