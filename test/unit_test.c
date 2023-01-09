@@ -22,8 +22,6 @@ Test(vector, add) {
   size_t capacity = 100;
   vector_t *vect = vector_new(sizeof(int), capacity);
 
-  cr_assert(!vector_add(vect, NULL), "should not be able to add NULL");
-
   for (int i = 0; i < (int)capacity; i++) {
     cr_assert(vector_add(vect, &i), "adding %d to vector should succeed", i);
   }
@@ -80,8 +78,6 @@ Test(vector, insert) {
   for (int i = 0; i < entries; i++) {
     vector_add(vect, &i);
   }
-
-  cr_assert(!vector_insert(vect, 0, NULL), "should not be able to add null");
 
   int val = 200;
   cr_assert(!vector_insert(vect, entries + 1, &val),
@@ -178,14 +174,11 @@ Test(vector, remove) {
 
 Test(vector, find) {
   int val = 0;
-  cr_assert(vector_find(NULL, &val) == 0, "null vector should return 0");
   vector_t *vect = vector_new(sizeof(int), 0);
   int entries = 100;
   for (int i = 0; i < entries; i++) {
     vector_add(vect, &i);
   }
-  cr_assert(vector_find(vect, NULL) == vector_length(vect),
-            "should not be able to find NULL");
 
   cr_assert(vector_find(vect, &entries) == vector_length(vect),
             "should not be able to find non-existing element");

@@ -34,17 +34,10 @@ void vector_delete(struct vector *vect) {
   free(vect);
 }
 
-size_t vector_capacity(const struct vector *vect) {
-  return vect ? vect->capacity : 0;
-}
-size_t vector_length(const struct vector *vect) {
-  return vect ? vect->length : 0;
-}
+size_t vector_capacity(const struct vector *vect) { return vect->capacity; }
+size_t vector_length(const struct vector *vect) { return vect->length; }
 
 void *vector_get(const struct vector *vect, ptrdiff_t position) {
-  if (!vect) {
-    return NULL;
-  }
   position += (position < 0) ? vect->length : 0;
   if (position < 0 || position >= (ptrdiff_t)vect->length) {
     return NULL;
@@ -64,9 +57,6 @@ static inline int expand(struct vector *vect) {
 }
 
 int vector_add(struct vector *vect, const void *restrict value) {
-  if (!vect || !value) {
-    return 0;
-  }
   if (vect->length == vect->capacity) {
     if (!expand(vect)) {
       return 0;
@@ -79,9 +69,6 @@ int vector_add(struct vector *vect, const void *restrict value) {
 
 int vector_insert(struct vector *vect, ptrdiff_t position,
                   const void *restrict value) {
-  if (!vect || !value) {
-    return 0;
-  }
   position += (position < 0) ? vect->length : 0;
   if (position < 0 || position > (ptrdiff_t)vect->length) {
     return 0;
@@ -110,9 +97,6 @@ void contract(struct vector *vect) {
 
 int vector_remove(struct vector *vect, ptrdiff_t position,
                   void *restrict output) {
-  if (!vect) {
-    return 0;
-  }
   position += (position < 0) ? vect->length : 0;
   if (position < 0 || position >= (ptrdiff_t)vect->length) {
     return 0;
@@ -132,12 +116,6 @@ int vector_remove(struct vector *vect, ptrdiff_t position,
 }
 
 size_t vector_find(const struct vector *vect, const void *value) {
-  if (!vect) {
-    return 0;
-  }
-  if (!value) {
-    return vect->length;
-  }
   size_t position;
   for (position = 0; memcmp((char *)vect->data + position * vect->item_size,
                             value, vect->item_size) &&
@@ -148,8 +126,5 @@ size_t vector_find(const struct vector *vect, const void *value) {
 }
 
 void vector_sort(vector_t *vect, int (*comp)(const void *, const void *)) {
-  if (!vect) {
-    return;
-  }
   qsort(vect->data, vect->length, vect->item_size, comp);
 }
