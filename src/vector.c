@@ -53,9 +53,6 @@ void *vector_get(const struct vector *vect, ptrdiff_t position) {
 }
 
 static inline int expand(struct vector *vect) {
-  if (!vect) {
-    return 0;
-  }
   void *data = realloc(vect->data, (2 * vect->capacity + 1) * vect->data_size);
   if (!data) {
     return 0;
@@ -99,5 +96,37 @@ int vector_insert(struct vector *vect, ptrdiff_t position,
           (vect->length++ - position) * vect->data_size);
   memcpy((char *)vect->data + vect->data_size * position, value,
          vect->data_size);
+  return 1;
+}
+
+void contract(struct vector *vect) {
+  void *data = realloc(vect->data, (vect->capacity / 2) * vect->data_size);
+  if (!data) {
+    return;
+  }
+  vect->capacity /= 2;
+  vect->data = data;
+}
+
+int vector_remove(struct vector *vect, ptrdiff_t position,
+                  void *restrict output) {
+  if (!vect) {
+    return 0;
+  }
+  position += (position < 0) ? vect->length : 0;
+  if (position < 0 || position >= (ptrdiff_t)vect->length) {
+    return 0;
+  }
+  if (output) {
+    memcpy(output, (char *)vect->data + vect->data_size * position,
+           vect->data_size);
+  }
+  memmove((char *)vect->data + position * vect->data_size,
+          (char *)vect->data + (position + 1) * vect->data_size,
+          (--vect->length - position) * vect->data_size);
+  if (vect->length <= vect->capacity / 4) {
+
+    contract(vect);
+  }
   return 1;
 }

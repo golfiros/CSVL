@@ -81,25 +81,97 @@ Test(vector, insert) {
     vector_add(vect, &i);
   }
 
-  int val = 200;
   cr_assert(!vector_insert(vect, 0, NULL), "should not be able to add null");
-  cr_assert(!vector_insert(vect, 2 * entries, &val),
+
+  int val = 200;
+  cr_assert(!vector_insert(vect, entries + 1, &val),
             "should not be able to insert out of bounds");
-  cr_assert(!vector_insert(vect, -2 * entries, &val),
+  cr_assert(!vector_insert(vect, -(entries + 1), &val),
             "should not be able to insert out of bounds");
 
   cr_assert(vector_insert(vect, entries / 2, &val),
             "should be able to insert at position %d", entries / 2);
   cr_assert(*(int *)vector_get(vect, entries / 2) == val,
-            "entry %d should be %d", entries / 2, val);
+            "entry %d should be %d, got %d", entries / 2, val,
+            *(int *)vector_get(vect, entries / 2));
+
+  for (int i = 0; i < entries / 2; i++) {
+    cr_assert(*(int *)vector_get(vect, i) == i, "entry %d should be %d, got %d",
+              i, i, *(int *)vector_get(vect, i));
+  }
+  for (int i = entries / 2 + 1; i < entries + 1; i++) {
+    cr_assert(*(int *)vector_get(vect, i) == i - 1,
+              "entry %d should be %d, got %d", i, i - 1,
+              *(int *)vector_get(vect, i));
+  }
+
   val += 1;
   cr_assert(vector_insert(vect, -entries / 2, &val),
             "should be able to insert at position %d", -entries / 2);
   cr_assert(*(int *)vector_get(vect, -(entries / 2 + 1)) == val,
-            "entry %d should be %d", -(entries / 2 + 1), val);
+            "entry %d should be %d, got %d", -(entries / 2 + 1), val,
+            *(int *)vector_get(vect, -(entries / 2 + 1)));
 
   cr_assert(vector_length(vect) == (size_t)entries + 2,
             "vector length should be %d", entries + 2);
+
+  vector_delete(vect);
+}
+
+Test(vector, remove) {
+  vector_t *vect = vector_new(sizeof(int), 0);
+
+  int entries = 100;
+  for (int i = 0; i < entries; i++) {
+    vector_add(vect, &i);
+  }
+
+  cr_assert(vector_remove(vect, 0, NULL),
+            "should be able to remove first element");
+  cr_assert(vector_length(vect) == (size_t)entries - 1,
+            "vector length should be %d", entries - 1);
+
+  for (int i = 1; i < entries; i++) {
+    cr_assert(*(int *)vector_get(vect, i - 1) == i,
+              "entry %d should be %d, got %d", i - 1, i,
+              *(int *)vector_get(vect, i - 1));
+  }
+
+  int val = 0;
+  vector_insert(vect, 0, &val);
+
+  cr_assert(!vector_remove(vect, entries, &val),
+            "should not be able to remove out of bounds");
+  cr_assert(!vector_remove(vect, -(entries + 1), &val),
+            "should not be able to remove out of bounds");
+
+  cr_assert(vector_remove(vect, entries / 2, &val),
+            "should be able to remove from position %d", entries / 2);
+  cr_assert(val == entries / 2, "output should be %d, got %d", entries / 2,
+            val);
+  for (int i = 0; i < entries / 2; i++) {
+    cr_assert(*(int *)vector_get(vect, i) == i, "entry %d should be %d, got %d",
+              i, i, *(int *)vector_get(vect, i));
+  }
+  for (int i = entries / 2; i < entries - 1; i++) {
+    cr_assert(*(int *)vector_get(vect, i) == i + 1,
+              "entry %d should be %d, got %d", i, i + 1,
+              *(int *)vector_get(vect, i));
+  }
+
+  cr_assert(vector_remove(vect, -entries / 2, &val),
+            "should be able to remove from position %d", -entries / 2);
+
+  cr_assert(vector_length(vect) == (size_t)entries - 2,
+            "vector length should be %d, got %zu", entries - 2,
+            vector_length(vect));
+
+  for (; vector_length(vect);) {
+    cr_assert(vector_remove(vect, 0, NULL),
+              "should be able to remove element 0");
+  }
+  cr_expect(vector_capacity(vect) < (size_t)entries,
+            "vector should have shrunk, got %zu", vector_capacity(vect));
 
   vector_delete(vect);
 }
