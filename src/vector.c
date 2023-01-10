@@ -183,7 +183,7 @@ struct iterator *vector_iterator_val(vector_t *vect, int reverse) {
 
 struct iterator *vector_iterator_ref(vector_t *vect, int reverse) {
   struct vector_state state;
-  state.position = reverse ? vect->length - 1 : 0;
+  state.position = reverse ? vect->length : 0;
   state.vect = *vect;
   return reverse ? iterator_new(sizeof(struct vector_state), &state, prev_ref)
                  : iterator_new(sizeof(struct vector_state), &state, next_ref);

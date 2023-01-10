@@ -1,4 +1,11 @@
-add_executable(unit_test unit_test.c)
-target_link_libraries(unit_test csvl criterion)
+add_executable(iterator_test iterator_test.c)
+target_link_libraries(iterator_test csvl criterion)
 
-add_custom_target(test COMMAND unit_test --always-succeed)
+add_executable(vector_test vector_test.c)
+target_link_libraries(vector_test csvl criterion)
+
+add_custom_target(test 
+  COMMAND echo "[----] Testing iterators"
+  COMMAND iterator_test --always-succeed
+  COMMAND echo "[----] Testing vectors"
+  COMMAND vector_test --always-succeed)

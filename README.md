@@ -5,7 +5,7 @@
 
 Are you the type of person to *wince* whenever you read or hear "C/C++"? And
 yet, you still kind of see some utilitarian charm in doing a `foreach` over an 
-`std::map<string, int>`? Well look no further. 
+`std::map<std::string, int>`? Well look no further. 
 
 That's right, with the CSVL you'll have access to a very <s>in</s>convenient
 API for typeless collection data structures in standard C99 without any of the 
@@ -24,7 +24,7 @@ short:
 + The collections should be completely generic - if you can store it in memory, 
 you can make a collection out of it
 + Macros are useful, but should not be everywhere - we're not trying to emulate
-templates, Leave that to C++
+templates, leave that to C++
 + Memory locality should be a priority - a warm cache is a happy cache
 + Don't worry too much about performance - the time you save by using these
 generic collections comes at the cost of making your code impossible to be 
