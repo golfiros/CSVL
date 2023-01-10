@@ -1,5 +1,24 @@
 #include <criterion/criterion.h>
 
+const int entries = 100;
+
+#include <CSVL/iterator.h>
+
+int add_one(void *data, void *output) {
+  if (*(int *)data == entries) {
+    return 0;
+  }
+  *(int *)output = (*(int *)data)++;
+  return 1;
+}
+
+Test(iterator, allocate) {
+  int initial = 0;
+  iterator_t *iter = iterator_new(sizeof(int), sizeof(int), &initial, add_one);
+  cr_assert(iter, "allocated iterator should not be null");
+  iterator_delete(iter);
+}
+
 #include <CSVL/vector.h>
 
 Test(vector, allocate) {
@@ -7,7 +26,7 @@ Test(vector, allocate) {
   cr_assert(vect, "allocated vector should not be null");
   vector_delete(vect);
 
-  size_t capacity = 100;
+  size_t capacity = entries;
   vect = vector_new(sizeof(int), capacity);
 
   cr_assert(vect, "allocated vector should not be null");
@@ -19,7 +38,7 @@ Test(vector, allocate) {
 }
 
 Test(vector, add) {
-  size_t capacity = 100;
+  size_t capacity = entries;
   vector_t *vect = vector_new(sizeof(int), capacity);
 
   for (int i = 0; i < (int)capacity; i++) {
@@ -45,7 +64,6 @@ Test(vector, add) {
 Test(vector, get) {
   vector_t *vect = vector_new(sizeof(int), 0);
 
-  int entries = 100;
   for (int i = 0; i < entries; i++) {
     vector_append(vect, &i);
   }
@@ -74,7 +92,6 @@ Test(vector, get) {
 Test(vector, insert) {
   vector_t *vect = vector_new(sizeof(int), 0);
 
-  int entries = 100;
   for (int i = 0; i < entries; i++) {
     vector_append(vect, &i);
   }
@@ -117,7 +134,6 @@ Test(vector, insert) {
 Test(vector, remove) {
   vector_t *vect = vector_new(sizeof(int), 0);
 
-  int entries = 100;
   for (int i = 0; i < entries; i++) {
     vector_append(vect, &i);
   }
@@ -175,7 +191,6 @@ Test(vector, remove) {
 Test(vector, find) {
   int val = 0;
   vector_t *vect = vector_new(sizeof(int), 0);
-  int entries = 100;
   for (int i = 0; i < entries; i++) {
     vector_append(vect, &i);
   }
@@ -193,7 +208,6 @@ int intcmp(const void *p1, const void *p2) { return *(int *)p1 - *(int *)p2; }
 
 Test(vector, sort) {
   vector_t *vect = vector_new(sizeof(int), 0);
-  int entries = 100;
   for (int i = entries - 1; i >= 0; i--) {
     vector_append(vect, &i);
   }

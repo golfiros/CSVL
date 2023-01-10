@@ -1,4 +1,5 @@
 set(SOURCES 
+  iterator.c
   vector.c)
 
 add_library(csvl SHARED ${SOURCES})
