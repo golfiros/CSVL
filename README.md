@@ -18,7 +18,8 @@ have an associative map with `struct unreasonably_complicated` valued keys and
 
 To be very honest, if you couldn't tell by the rampant sarcasm in the
 introduction, this is mostly a fun exercise. As such, there are no hard
-requirements for this project. However, the principles cling to are, in short:
+requirements for this project. However, the principles to cling to are, in 
+short:
 
 + The collections should be completely generic - if you can store it in memory, 
 you can make a collection out of it
