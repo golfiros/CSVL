@@ -21,4 +21,9 @@ size_t vector_find(const vector_t *vect, const void *value);
 
 void vector_sort(vector_t *vect, int (*comp)(const void *, const void *));
 
+#include <CSVL/iterator.h>
+
+iterator_t *vector_iterator_val(vector_t *vect, int reverse);
+iterator_t *vector_iterator_ref(vector_t *vect, int reverse);
+
 #endif

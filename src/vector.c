@@ -128,3 +128,63 @@ size_t vector_find(const struct vector *vect, const void *value) {
 void vector_sort(vector_t *vect, int (*comp)(const void *, const void *)) {
   qsort(vect->data, vect->length, vect->item_size, comp);
 }
+
+#include <struct_iterator.h>
+
+struct vector_state {
+  size_t position;
+  struct vector vect;
+};
+
+int next_val(void *state, void *output) {
+  struct vector_state *p = state;
+  if (p->position == p->vect.length) {
+    return 0;
+  }
+  memcpy(output, (char *)p->vect.data + p->vect.item_size * p->position++,
+         p->vect.item_size);
+  return 1;
+}
+int prev_val(void *state, void *output) {
+  struct vector_state *p = state;
+  if (p->position == 0) {
+    return 0;
+  }
+  memcpy(output, (char *)p->vect.data + p->vect.item_size * --p->position,
+         p->vect.item_size);
+  return 1;
+}
+int next_ref(void *state, void *output) {
+  struct vector_state *p = state;
+  if (p->position == p->vect.length) {
+    return 0;
+  }
+  void *q = (char *)p->vect.data + p->vect.item_size * p->position++;
+  memcpy(output, &q, sizeof(void *));
+  return 1;
+}
+int prev_ref(void *state, void *output) {
+  struct vector_state *p = state;
+  if (p->position == 0) {
+    return 0;
+  }
+  void *q = (char *)p->vect.data + p->vect.item_size * --p->position;
+  memcpy(output, &q, sizeof(void *));
+  return 1;
+}
+
+struct iterator *vector_iterator_val(vector_t *vect, int reverse) {
+  struct vector_state state;
+  state.position = reverse ? vect->length : 0;
+  state.vect = *vect;
+  return reverse ? iterator_new(sizeof(struct vector_state), &state, prev_val)
+                 : iterator_new(sizeof(struct vector_state), &state, next_val);
+}
+
+struct iterator *vector_iterator_ref(vector_t *vect, int reverse) {
+  struct vector_state state;
+  state.position = reverse ? vect->length - 1 : 0;
+  state.vect = *vect;
+  return reverse ? iterator_new(sizeof(struct vector_state), &state, prev_ref)
+                 : iterator_new(sizeof(struct vector_state), &state, next_ref);
+}

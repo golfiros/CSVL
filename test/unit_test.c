@@ -232,3 +232,20 @@ Test(vector, sort) {
 
   vector_delete(vect);
 }
+
+Test(vector, iterator) {
+  vector_t *vect = vector_new(sizeof(int), 0);
+  for (int i = 0; i < entries; i++) {
+    vector_append(vect, &i);
+  }
+  int i = 0;
+  for_each(int *, x, vector_iterator_ref(vect, 0), {
+    cr_assert(*x == i, "expected %d got %d", i, *x);
+    *x = ++i;
+  });
+  for_each(int, x, vector_iterator_val(vect, 1), {
+    cr_assert(x == i, "expected %d got %d", i, x);
+    i--;
+  });
+  vector_delete(vect);
+}
