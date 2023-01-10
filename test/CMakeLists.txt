@@ -1,3 +1,5 @@
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+
 add_executable(iterator_test iterator_test.c)
 target_link_libraries(iterator_test csvl criterion)
 

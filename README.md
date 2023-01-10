@@ -57,7 +57,7 @@ Just use CMake:
     make
 
 Then `libcsvl.so` will be built to the `lib/` directory. Tests/examples
-will be in the root of their respective directories.
+will be in the `bin/` of their respective directories.
 
 Since this builds a shared library and I can't be bothered to `__declspec`
 things, for now the codebase is \*nix only.
