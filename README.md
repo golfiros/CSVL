@@ -1,5 +1,5 @@
 
-# The C Standard `void \*` Library
+# The C Standard `void *` Library
 
 ## Introduction
 
