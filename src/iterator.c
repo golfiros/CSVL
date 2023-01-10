@@ -3,15 +3,9 @@
 
 #include <CSVL/iterator.h>
 
-struct iterator {
-  size_t item_size;
-  size_t data_size;
-  void *restrict data;
-  int (*next)(void *, void *);
-};
+#include <struct_iterator.h>
 
-struct iterator *iterator_new(size_t item_size, size_t data_size,
-                              const void *initial_data,
+struct iterator *iterator_new(size_t data_size, const void *initial_data,
                               int (*next)(void *data, void *output)) {
   void *data = malloc(data_size);
   if (!data) {
@@ -23,7 +17,6 @@ struct iterator *iterator_new(size_t item_size, size_t data_size,
   }
   memcpy(data, initial_data, data_size);
 
-  iter->item_size = item_size;
   iter->data_size = data_size;
   iter->data = data;
   iter->next = next;
@@ -34,4 +27,8 @@ struct iterator *iterator_new(size_t item_size, size_t data_size,
 void iterator_delete(struct iterator *iter) {
   free(iter->data);
   free(iter);
+}
+
+int iterator_next(struct iterator *iter, void *restrict output) {
+  return iter->next(iter->data, output);
 }
