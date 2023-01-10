@@ -21,4 +21,5 @@ add_subdirectory(src)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   add_subdirectory(test)
+  add_subdirectory(example)
 endif()
