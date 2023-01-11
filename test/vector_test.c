@@ -64,13 +64,6 @@ Test(vector, get) {
               entries - i);
   }
 
-  cr_assert(!vector_get(vect, entries), "vector element %d should be NULL",
-            entries);
-  for (int i = entries + 1; i < 2 * entries; i++) {
-    cr_assert(!vector_get(vect, i), "vector element %d should be null", i);
-    cr_assert(!vector_get(vect, -i), "vector element %d should be null", -i);
-  }
-
   vector_delete(vect);
 }
 
@@ -82,10 +75,6 @@ Test(vector, insert) {
   }
 
   int val = 200;
-  cr_assert(!vector_insert(vect, entries + 1, &val),
-            "should not be able to insert out of bounds");
-  cr_assert(!vector_insert(vect, -(entries + 1), &val),
-            "should not be able to insert out of bounds");
 
   cr_assert(vector_insert(vect, entries / 2, &val),
             "should be able to insert at position %d", entries / 2);
@@ -136,11 +125,6 @@ Test(vector, remove) {
 
   int val = 0;
   vector_insert(vect, 0, &val);
-
-  cr_assert(!vector_remove(vect, entries, &val),
-            "should not be able to remove out of bounds");
-  cr_assert(!vector_remove(vect, -(entries + 1), &val),
-            "should not be able to remove out of bounds");
 
   cr_assert(vector_remove(vect, entries / 2, &val),
             "should be able to remove from position %d", entries / 2);

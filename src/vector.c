@@ -39,9 +39,6 @@ size_t vector_length(const struct vector *vect) { return vect->length; }
 
 void *vector_get(const struct vector *vect, ptrdiff_t position) {
   position += (position < 0) ? vect->length : 0;
-  if (position < 0 || position >= (ptrdiff_t)vect->length) {
-    return NULL;
-  }
   return (char *)vect->data + vect->item_size * position;
 }
 
@@ -70,9 +67,6 @@ int vector_append(struct vector *vect, const void *restrict value) {
 int vector_insert(struct vector *vect, ptrdiff_t position,
                   const void *restrict value) {
   position += (position < 0) ? vect->length : 0;
-  if (position < 0 || position > (ptrdiff_t)vect->length) {
-    return 0;
-  }
   if (vect->length == vect->capacity) {
     if (!expand(vect)) {
       return 0;
@@ -98,9 +92,6 @@ void contract(struct vector *vect) {
 int vector_remove(struct vector *vect, ptrdiff_t position,
                   void *restrict output) {
   position += (position < 0) ? vect->length : 0;
-  if (position < 0 || position >= (ptrdiff_t)vect->length) {
-    return 0;
-  }
   if (output) {
     memcpy(output, (char *)vect->data + vect->item_size * position,
            vect->item_size);
