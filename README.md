@@ -36,11 +36,11 @@ Right now our happy family of generic collections includes
 
 + Basic Iterators / `for_each` loops
 + Vectors
++ Stacks
 
 But the idea is to also implement
 
 + Advanced Iterators (`apply, filter, reduce`)
-+ Stacks
 + Queues
 + Heaps
 + Lists

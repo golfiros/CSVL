@@ -80,7 +80,7 @@ int vector_insert(struct vector *vect, ptrdiff_t position,
   return 1;
 }
 
-void contract(struct vector *vect) {
+static inline void contract(struct vector *vect) {
   void *data = realloc(vect->data, (vect->capacity / 2) * vect->item_size);
   if (!data) {
     return;
@@ -89,8 +89,8 @@ void contract(struct vector *vect) {
   vect->data = data;
 }
 
-int vector_remove(struct vector *vect, ptrdiff_t position,
-                  void *restrict output) {
+void vector_remove(struct vector *vect, ptrdiff_t position,
+                   void *restrict output) {
   position += (position < 0) ? vect->length : 0;
   if (output) {
     memcpy(output, (char *)vect->data + vect->item_size * position,
@@ -100,10 +100,8 @@ int vector_remove(struct vector *vect, ptrdiff_t position,
           (char *)vect->data + (position + 1) * vect->item_size,
           (--vect->length - position) * vect->item_size);
   if (vect->length <= vect->capacity / 4) {
-
     contract(vect);
   }
-  return 1;
 }
 
 size_t vector_find(const struct vector *vect, const void *value) {
@@ -120,14 +118,12 @@ void vector_sort(vector_t *vect, int (*comp)(const void *, const void *)) {
   qsort(vect->data, vect->length, vect->item_size, comp);
 }
 
-#include <struct_iterator.h>
-
 struct vector_state {
   size_t position;
   struct vector vect;
 };
 
-int next_val(void *state, void *output) {
+static int next_val(void *state, void *output) {
   struct vector_state *p = state;
   if (p->position == p->vect.length) {
     return 0;
@@ -136,7 +132,7 @@ int next_val(void *state, void *output) {
          p->vect.item_size);
   return 1;
 }
-int prev_val(void *state, void *output) {
+static int prev_val(void *state, void *output) {
   struct vector_state *p = state;
   if (p->position == 0) {
     return 0;
@@ -145,7 +141,7 @@ int prev_val(void *state, void *output) {
          p->vect.item_size);
   return 1;
 }
-int next_ref(void *state, void *output) {
+static int next_ref(void *state, void *output) {
   struct vector_state *p = state;
   if (p->position == p->vect.length) {
     return 0;
@@ -154,7 +150,7 @@ int next_ref(void *state, void *output) {
   memcpy(output, &q, sizeof(void *));
   return 1;
 }
-int prev_ref(void *state, void *output) {
+static int prev_ref(void *state, void *output) {
   struct vector_state *p = state;
   if (p->position == 0) {
     return 0;

@@ -6,8 +6,13 @@ target_link_libraries(iterator_test csvl criterion)
 add_executable(vector_test vector_test.c)
 target_link_libraries(vector_test csvl criterion)
 
+add_executable(stack_test stack_test.c)
+target_link_libraries(stack_test csvl criterion)
+
 add_custom_target(test 
   COMMAND echo "[----] Testing iterators"
   COMMAND iterator_test --always-succeed
   COMMAND echo "[----] Testing vectors"
-  COMMAND vector_test --always-succeed)
+  COMMAND vector_test --always-succeed
+  COMMAND echo "[----] Testing stacks"
+  COMMAND stack_test --always-succeed)

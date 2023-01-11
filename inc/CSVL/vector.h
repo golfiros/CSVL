@@ -15,7 +15,7 @@ void *vector_get(const vector_t *vect, ptrdiff_t position);
 int vector_append(vector_t *vect, const void *restrict value);
 int vector_insert(vector_t *vect, ptrdiff_t position,
                   const void *restrict value);
-int vector_remove(vector_t *vect, ptrdiff_t position, void *restrict output);
+void vector_remove(vector_t *vect, ptrdiff_t position, void *restrict output);
 
 size_t vector_find(const vector_t *vect, const void *value);
 

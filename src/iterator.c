@@ -3,7 +3,11 @@
 
 #include <CSVL/iterator.h>
 
-#include <struct_iterator.h>
+struct iterator {
+  size_t data_size;
+  void *restrict data;
+  int (*next)(void *, void *);
+};
 
 struct iterator *iterator_new(size_t data_size, const void *initial_data,
                               int (*next)(void *data, void *output)) {

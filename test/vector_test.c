@@ -112,8 +112,7 @@ Test(vector, remove) {
     vector_append(vect, &i);
   }
 
-  cr_assert(vector_remove(vect, 0, NULL),
-            "should be able to remove first element");
+  vector_remove(vect, 0, NULL);
   cr_assert(vector_length(vect) == (size_t)entries - 1,
             "vector length should be %d", entries - 1);
 
@@ -126,8 +125,7 @@ Test(vector, remove) {
   int val = 0;
   vector_insert(vect, 0, &val);
 
-  cr_assert(vector_remove(vect, entries / 2, &val),
-            "should be able to remove from position %d", entries / 2);
+  vector_remove(vect, entries / 2, &val);
   cr_assert(val == entries / 2, "output should be %d, got %d", entries / 2,
             val);
   for (int i = 0; i < entries / 2; i++) {
@@ -140,16 +138,14 @@ Test(vector, remove) {
               *(int *)vector_get(vect, i));
   }
 
-  cr_assert(vector_remove(vect, -entries / 2, &val),
-            "should be able to remove from position %d", -entries / 2);
+  vector_remove(vect, -entries / 2, &val);
 
   cr_assert(vector_length(vect) == (size_t)entries - 2,
             "vector length should be %d, got %zu", entries - 2,
             vector_length(vect));
 
   for (; vector_length(vect);) {
-    cr_assert(vector_remove(vect, 0, NULL),
-              "should be able to remove element 0");
+    vector_remove(vect, 0, NULL);
   }
   cr_expect(vector_capacity(vect) < (size_t)entries,
             "vector should have shrunk, got %zu", vector_capacity(vect));
